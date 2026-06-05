@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miso's Birthday Party – RSVP</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --lavender: #C9B8E8;
+    --lavender-light: #EDE5F7;
+    --lavender-mid: #B49DD6;
+    --lavender-deep: #8B6BB5;
+    --lavender-dark: #5E3D8F;
+    --rose-gold: #C9956A;
+    --rose-gold-light: #F2DDD0;
+    --rose-gold-mid: #D4A882;
+    --rose-gold-dark: #A0714A;
+    --cream: #FDF8F4;
+    --white: #FFFFFF;
+    --text-dark: #2E1B47;
+    --text-mid: #6B4F8A;
+    --text-muted: #9E83B5;
+    --border: rgba(180, 157, 214, 0.3);
+    --shadow: 0 8px 40px rgba(139, 107, 181, 0.15);
+  }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Decorative background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,184,232,0.25) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -150px; left: -150px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,149,106,0.18) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrapper {
+    position: relative; z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  /* Hero Header */
+  .hero {
+    text-align: center;
+    padding: 3rem 2rem 2.5rem;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rose-gold-dark);
+    border: 0.5px solid var(--rose-gold-mid);
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 1.5rem;
+    background: rgba(242, 221, 208, 0.5);
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 9vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--lavender-dark);
+    margin-bottom: 0.3rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--rose-gold);
+    display: block;
+    font-size: 1.15em;
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-top: 0.75rem;
+  }
+
+  .petal-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 1.5rem 0;
+  }
+  .petal-line {
+    width: 60px; height: 0.5px;
+    background: linear-gradient(90deg, transparent, var(--lavender-mid));
+  }
+  .petal-line.right { background: linear-gradient(90deg, var(--lavender-mid), transparent); }
+  .petal-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--rose-gold);
+  }
+
+  /* Event Details Card */
+  .details-card {
+    background: var(--white);
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    padding: 1.75rem 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+
+  .details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .detail-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .detail-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--lavender-light);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+    color: var(--lavender-deep);
+  }
+
+  .detail-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--rose-gold-dark);
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+
+  .detail-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .detail-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* RSVP Form */
+  .form-card {
+    background: var(--white);
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+  }
+
+  .form-section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--lavender-dark);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .form-section-title::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: var(--border);
+  }
+
+  .field-group {
+    margin-bottom: 1.25rem;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    margin-bottom: 8px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 0.5px solid var(--lavender-mid);
+    border-radius: 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    background: var(--lavender-light);
+    transition: border-color 0.2s, background 0.2s;
+    outline: none;
+    appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--lavender-deep);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(139, 107, 181, 0.12);
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238B6BB5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* RSVP Toggle */
+  .rsvp-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .rsvp-btn {
+    padding: 14px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .rsvp-btn span {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .rsvp-btn.yes.active {
+    background: var(--lavender-light);
+    border-color: var(--lavender-deep);
+    color: var(--lavender-dark);
+  }
+
+  .rsvp-btn.no.active {
+    background: var(--rose-gold-light);
+    border-color: var(--rose-gold);
+    color: var(--rose-gold-dark);
+  }
+
+  .rsvp-btn:hover { transform: translateY(-1px); }
+
+  /* Guest count */
+  .count-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .count-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid var(--lavender-mid);
+    background: var(--lavender-light);
+    color: var(--lavender-dark);
+    font-size: 18px;
+    font-weight: 300;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .count-btn:hover { background: var(--lavender-mid); color: var(--white); }
+
+  .count-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--lavender-dark);
+    min-width: 2rem;
+    text-align: center;
+  }
+
+  .count-label-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* Toggle switch */
+  .toggle-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background: var(--lavender-light);
+    border-radius: 12px;
+    border: 0.5px solid var(--border);
+    margin-bottom: 1rem;
+    cursor: pointer;
+  }
+
+  .toggle-field-label {
+    font-size: 14px;
+    color: var(--text-dark);
+    font-weight: 400;
+  }
+
+  .toggle-switch {
+    width: 44px; height: 24px;
+    border-radius: 12px;
+    background: var(--lavender-mid);
+    position: relative;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .toggle-switch.on { background: var(--lavender-deep); }
+
+  .toggle-knob {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: white;
+    position: absolute;
+    top: 3px; left: 3px;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  .toggle-switch.on .toggle-knob { transform: translateX(20px); }
+
+  /* Kids section */
+  .kids-section {
+    display: none;
+    margin-top: 1rem;
+    padding: 1.25rem;
+    background: rgba(242, 221, 208, 0.35);
+    border-radius: 12px;
+    border: 0.5px solid rgba(201, 149, 106, 0.25);
+  }
+
+  .kids-section.visible { display: block; }
+
+  .child-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .child-row input[type="number"] {
+    width: 80px;
+    text-align: center;
+    background: var(--white);
+  }
+
+  .child-row-label {
+    font-size: 13px;
+    color: var(--text-mid);
+    flex-shrink: 0;
+  }
+
+  .add-child-btn {
+    background: none;
+    border: 1px dashed var(--rose-gold-mid);
+    color: var(--rose-gold-dark);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s;
+    margin-top: 6px;
+  }
+
+  .add-child-btn:hover { background: rgba(201, 149, 106, 0.1); }
+
+  .remove-child {
+    background: none;
+    border: none;
+    color: var(--rose-gold);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+
+  .remove-child:hover { background: var(--rose-gold-light); }
+
+  /* Dietary note */
+  .dietary-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .diet-chip {
+    padding: 6px 14px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+    background: transparent;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .diet-chip.active {
+    background: var(--lavender-light);
+    border-color: var(--lavender-deep);
+    color: var(--lavender-dark);
+  }
+
+  /* Submit */
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 50px;
+    border: none;
+    background: linear-gradient(135deg, var(--lavender-deep), var(--lavender-dark));
+    color: white;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.25s;
+    margin-top: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--rose-gold), var(--rose-gold-dark));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .submit-btn:hover::before { opacity: 0.25; }
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(94, 61, 143, 0.35); }
+  .submit-btn:active { transform: translateY(0); }
+
+  .submit-btn span { position: relative; z-index: 1; }
+
+  /* Success Screen */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 3rem 2rem;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .success-screen.visible { display: block; }
+
+  .success-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--lavender-light);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    border: 2px solid var(--lavender-mid);
+  }
+
+  .success-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--lavender-dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .success-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 380px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .decline-message {
+    display: none;
+    text-align: center;
+    padding: 1.5rem;
+    background: var(--rose-gold-light);
+    border-radius: 14px;
+    border: 0.5px solid rgba(201, 149, 106, 0.3);
+    margin-top: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: var(--rose-gold-dark);
+    font-style: italic;
+  }
+
+  .decline-message.visible { display: block; }
+
+  /* Section spacer */
+  .form-divider {
+    height: 0.5px;
+    background: var(--border);
+    margin: 1.5rem 0;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .attendance-form { animation: fadeIn 0.3s ease; }
+
+  /* Review screen */
+  .review-screen {
+    display: none;
+    background: var(--white);
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.3s ease;
+  }
+  .review-screen.visible { display: block; }
+
+  .review-block {
+    background: var(--lavender-light);
+    border-radius: 14px;
+    border: 0.5px solid var(--border);
+    overflow: hidden;
+  }
+
+  .review-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 11px 16px;
+    border-bottom: 0.5px solid var(--border);
+    gap: 16px;
+  }
+  .review-row:last-child { border-bottom: none; }
+
+  .review-key {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--rose-gold-dark);
+    font-weight: 500;
+    flex-shrink: 0;
+    padding-top: 2px;
+    min-width: 90px;
+  }
+
+  .review-val {
+    font-size: 14px;
+    color: var(--text-dark);
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  .edit-btn {
+    padding: 14px 20px;
+    border-radius: 50px;
+    border: 1px solid var(--lavender-mid);
+    background: transparent;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .edit-btn:hover { background: var(--lavender-light); }
+
+  /* Footer note */
+  .footer-note {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  /* Floating sparkles */
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+    font-size: 14px;
+  }
+
+  @media (max-width: 520px) {
+    .details-grid { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Decorative sparkles -->
+<div class="sparkle" style="top:8%;left:4%;font-size:10px;opacity:.2;">✦</div>
+<div class="sparkle" style="top:15%;right:6%;font-size:16px;opacity:.15;">✦</div>
+<div class="sparkle" style="top:40%;left:2%;font-size:8px;opacity:.2;">✦</div>
+<div class="sparkle" style="top:60%;right:3%;font-size:12px;opacity:.18;">✦</div>
+<div class="sparkle" style="bottom:20%;left:5%;font-size:14px;opacity:.15;">✦</div>
+
+<div class="page-wrapper">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-badge">You're invited</div>
+    <h1 class="hero-title">
+      Miso's
+      <em>Birthday Party</em>
+    </h1>
+    <p class="hero-subtitle">Join us for a celebration</p>
+    <div class="petal-divider">
+      <div class="petal-line"></div>
+      <div class="petal-dot"></div>
+      <div class="petal-dot" style="background:var(--lavender-mid);width:4px;height:4px;"></div>
+      <div class="petal-dot"></div>
+      <div class="petal-line right"></div>
+    </div>
+  </header>
+
+  <!-- Event Details -->
+  <div class="details-card">
+    <div class="details-grid">
+      <div class="detail-item">
+        <div class="detail-icon">📅</div>
+        <div>
+          <div class="detail-label">Date</div>
+          <div class="detail-value">Saturday, June 20th</div>
+          <div class="detail-sub">4:30 PM</div>
+        </div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">🍖</div>
+        <div>
+          <div class="detail-label">Venue</div>
+          <div class="detail-value">Gangnam KBBQ</div>
+          <div class="detail-sub">215 S Loop 336 W, Ste 300<br>Conroe, TX 77304</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RSVP Form Card -->
+  <div class="form-card" id="formCard">
+
+    <div class="form-section-title">RSVP</div>
+
+    <!-- Attending toggle -->
+    <div class="rsvp-toggle" id="rsvpToggle">
+      <button class="rsvp-btn yes" onclick="setAttending(true)" id="yesBtn">
+        🎉
+        <span>Attending</span>
+      </button>
+      <button class="rsvp-btn no" onclick="setAttending(false)" id="noBtn">
+        💌
+        <span>Can't make it</span>
+      </button>
+    </div>
+
+    <!-- Decline message -->
+    <div class="decline-message" id="declineMsg">
+      We'll miss you! Thank you for letting us know. 🌸
+    </div>
+
+    <!-- Main form (shown when attending = yes) -->
+    <div class="attendance-form" id="attendanceForm" style="display:none;">
+
+      <!-- Name + contact -->
+      <div class="field-row">
+        <div class="field-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" placeholder="Your first name" />
+        </div>
+        <div class="field-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" placeholder="Your last name" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="your@email.com" />
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- Adults -->
+      <div class="form-section-title" style="font-size:1.2rem;">Guest Count</div>
+
+      <div class="field-group">
+        <label>Adults Attending (including yourself)</label>
+        <div class="count-row">
+          <button class="count-btn" onclick="changeAdults(-1)">−</button>
+          <div class="count-display" id="adultCount">1</div>
+          <div class="count-label-sub">adult(s)</div>
+          <button class="count-btn" onclick="changeAdults(1)">+</button>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- Kids toggle -->
+      <div class="form-section-title" style="font-size:1.2rem;">Children</div>
+
+      <div class="toggle-field" onclick="toggleKids()" id="kidsToggle">
+        <div>
+          <div class="toggle-field-label">Bringing kids along?</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Ages 10 &amp; under</div>
+        </div>
+        <div class="toggle-switch" id="kidsSwitch">
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+
+      <div class="kids-section" id="kidsSection">
+        <div style="font-size:13px;color:var(--rose-gold-dark);margin-bottom:12px;font-weight:500;">Enter each child's age (10 &amp; under)</div>
+        <div id="childrenList"></div>
+        <button class="add-child-btn" onclick="addChild()">+ Add another child</button>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <!-- Dietary preferences -->
+      <div class="form-section-title" style="font-size:1.2rem;">Dietary Needs</div>
+
+      <div class="field-group">
+        <label>Select any that apply</label>
+        <div class="dietary-options" id="dietOptions">
+          <button class="diet-chip" onclick="toggleDiet(this)">None / No restrictions</button>
+          <button class="diet-chip" onclick="toggleDiet(this)">Vegetarian</button>
+          <button class="diet-chip" onclick="toggleDiet(this)">Vegan</button>
+          <button class="diet-chip" onclick="toggleDiet(this)">Gluten-free</button>
+          <button class="diet-chip" onclick="toggleDiet(this)">Halal</button>
+          <button class="diet-chip" onclick="toggleDiet(this)">Kosher</button>
+          <button class="diet-chip" onclick="toggleDiet(this)">Allergy / Other</button>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="notes">Any notes or special requests?</label>
+        <textarea id="notes" placeholder="Allergies, accessibility needs, or anything else we should know…"></textarea>
+      </div>
+
+      <button class="submit-btn" onclick="showReview()">
+        <span>Review My RSVP ✦</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Review / Confirm Screen -->
+  <div class="review-screen" id="reviewScreen">
+    <div class="form-section-title" style="margin-bottom:1.5rem;">Double-check your details</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.25rem;line-height:1.6;">Please make sure everything looks right before confirming. You won't be able to edit after submitting.</p>
+
+    <div class="review-block" id="reviewBlock"></div>
+
+    <div style="display:flex;gap:12px;margin-top:1.5rem;">
+      <button class="edit-btn" onclick="goBackToForm()">← Edit</button>
+      <button class="submit-btn" style="margin-top:0;flex:1;" onclick="confirmRSVP()">
+        <span>Confirm &amp; Submit ✦</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Success Screen -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">🎂</div>
+    <h2 class="success-title">We can't wait to see you!</h2>
+    <p class="success-subtitle" id="successMsg">Thank you for your RSVP. See you Saturday, June 20th at 4:30 PM at Gangnam KBBQ!</p>
+    <div class="petal-divider">
+      <div class="petal-line"></div>
+      <div class="petal-dot"></div>
+      <div class="petal-dot" style="background:var(--rose-gold);width:4px;height:4px;"></div>
+      <div class="petal-dot"></div>
+      <div class="petal-line right"></div>
+    </div>
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:var(--text-muted);">
+      215 S Loop 336 W, Ste 300 · Conroe, TX 77304
+    </p>
+  </div>
+
+  <p class="footer-note">Please RSVP by June 15th · Questions? Reach out to the host 💜</p>
+</div>
+
+<script>
+  // ▼▼▼ PASTE YOUR GOOGLE APPS SCRIPT URL HERE AFTER SETUP ▼▼▼
+  const SHEET_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+  // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+  let attending = null;
+  let adults = 1;
+  let kidsOn = false;
+  let childCount = 0;
+  let rsvpData = {};
+
+  function setAttending(val) {
+    attending = val;
+    document.getElementById('yesBtn').classList.toggle('active', val === true);
+    document.getElementById('noBtn').classList.toggle('active', val === false);
+    document.getElementById('attendanceForm').style.display = val ? 'block' : 'none';
+    document.getElementById('declineMsg').classList.toggle('visible', val === false);
+  }
+
+  function changeAdults(d) {
+    adults = Math.max(1, Math.min(20, adults + d));
+    document.getElementById('adultCount').textContent = adults;
+  }
+
+  function toggleKids() {
+    kidsOn = !kidsOn;
+    document.getElementById('kidsSwitch').classList.toggle('on', kidsOn);
+    document.getElementById('kidsSection').classList.toggle('visible', kidsOn);
+    if (kidsOn && childCount === 0) addChild();
+    if (!kidsOn) { document.getElementById('childrenList').innerHTML = ''; childCount = 0; }
+  }
+
+  function addChild() {
+    childCount++;
+    const id = 'child_' + childCount;
+    const div = document.createElement('div');
+    div.className = 'child-row';
+    div.id = id;
+    div.innerHTML = `
+      <span class="child-row-label">Child ${childCount}:</span>
+      <input type="number" min="0" max="10" placeholder="Age" style="width:80px;" />
+      <span class="child-row-label" style="font-size:12px;color:var(--text-muted);">years old</span>
+      <button class="remove-child" onclick="removeChild('${id}')" title="Remove">×</button>
+    `;
+    document.getElementById('childrenList').appendChild(div);
+  }
+
+  function removeChild(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  function toggleDiet(el) { el.classList.toggle('active'); }
+
+  function showReview() {
+    const first = document.getElementById('firstName').value.trim();
+    const last  = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    if (!attending) { alert('Please select whether you are attending.'); return; }
+    if (!first)     { document.getElementById('firstName').focus(); return; }
+
+    const kids = [];
+    document.querySelectorAll('.child-row').forEach(row => {
+      const age = row.querySelector('input[type="number"]').value;
+      if (age !== '') kids.push(parseInt(age));
+    });
+
+    const diets = [];
+    document.querySelectorAll('.diet-chip.active').forEach(c => diets.push(c.textContent.trim()));
+
+    const notes = document.getElementById('notes').value.trim();
+    const name  = first + (last ? ' ' + last : '');
+
+    rsvpData = { name, email, adults, kids, diets, notes };
+
+    const rows = [
+      ['Name',     name],
+      ['Email',    email || '—'],
+      ['Adults',   adults + ' adult' + (adults > 1 ? 's' : '')],
+      ['Children', kids.length > 0 ? kids.length + ' child' + (kids.length > 1 ? 'ren' : '') + ' · ages: ' + kids.join(', ') : 'None'],
+      ['Dietary',  diets.length > 0 ? diets.join(', ') : 'None selected'],
+      ['Notes',    notes || '—'],
+    ];
+
+    document.getElementById('reviewBlock').innerHTML = rows.map(([k, v]) =>
+      `<div class="review-row"><span class="review-key">${k}</span><span class="review-val">${v}</span></div>`
+    ).join('');
+
+    document.getElementById('formCard').style.display = 'none';
+    const rs = document.getElementById('reviewScreen');
+    rs.classList.add('visible');
+    rs.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function goBackToForm() {
+    document.getElementById('reviewScreen').classList.remove('visible');
+    document.getElementById('formCard').style.display = 'block';
+    document.getElementById('formCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function confirmRSVP() {
+    const confirmBtn = document.querySelector('#reviewScreen .submit-btn');
+    confirmBtn.disabled = true;
+    confirmBtn.querySelector('span').textContent = 'Submitting…';
+
+    const { name, email, adults, kids, diets, notes } = rsvpData;
+    const kidsText = kids.length > 0
+      ? kids.length + ' child' + (kids.length > 1 ? 'ren' : '') + ' (ages ' + kids.join(', ') + ')'
+      : 'None';
+
+    const payload = {
+      timestamp:  new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }),
+      name,
+      email,
+      attending:  'Yes',
+      adults,
+      children:   kidsText,
+      childAges:  kids.join(', ') || 'N/A',
+      dietary:    diets.join(', ') || 'None',
+      notes:      notes || ''
+    };
+
+    try {
+      if (SHEET_URL && SHEET_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
+        await fetch(SHEET_URL, {
+          method:  'POST',
+          mode:    'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload)
+        });
+      }
+    } catch (e) {
+      // Silent fail — guest still sees success, you can check logs if needed
+      console.warn('Sheet submission error:', e);
+    }
+
+    document.getElementById('reviewScreen').classList.remove('visible');
+    document.getElementById('successMsg').textContent =
+      `Thank you, ${name}! We have you down for ${adults} adult${adults > 1 ? 's' : ''}${kids.length > 0 ? ' + ' + kidsText : ''}. See you Saturday, June 20th at 4:30 PM at Gangnam KBBQ!`;
+    document.getElementById('successScreen').classList.add('visible');
+    document.getElementById('successScreen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+</body>
+</html>
