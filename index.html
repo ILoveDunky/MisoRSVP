@@ -638,6 +638,37 @@
   }
   .edit-btn:hover { background: var(--lavender-light); }
 
+  /* Guest name rows */
+  .guest-names-section {
+    margin-top: 1rem;
+    display: none;
+    animation: fadeIn 0.25s ease;
+  }
+  .guest-names-section.visible { display: block; }
+
+  .guest-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    animation: fadeIn 0.2s ease;
+  }
+  .guest-name-row input { flex: 1; }
+  .guest-name-row .guest-num {
+    font-size: 12px;
+    color: var(--text-muted);
+    min-width: 60px;
+    flex-shrink: 0;
+  }
+
+  /* Decline name form */
+  .decline-form {
+    display: none;
+    margin-top: 1rem;
+    animation: fadeIn 0.25s ease;
+  }
+  .decline-form.visible { display: block; }
+
   /* Footer note */
   .footer-note {
     text-align: center;
@@ -730,9 +761,24 @@
       </button>
     </div>
 
-    <!-- Decline message -->
-    <div class="decline-message" id="declineMsg">
-      We'll miss you! Thank you for letting us know. 🌸
+    <!-- Decline form -->
+    <div class="decline-form" id="declineForm">
+      <div class="decline-message" style="display:block;margin-bottom:1rem;">
+        We'll miss you! 🌸 Please leave your name so we know.
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label for="declineFirst">First Name</label>
+          <input type="text" id="declineFirst" placeholder="Your first name" />
+        </div>
+        <div class="field-group">
+          <label for="declineLast">Last Name</label>
+          <input type="text" id="declineLast" placeholder="Your last name" />
+        </div>
+      </div>
+      <button class="submit-btn" style="margin-top:0.75rem;" onclick="submitDecline()">
+        <span>Submit ✦</span>
+      </button>
     </div>
 
     <!-- Main form (shown when attending = yes) -->
@@ -768,6 +814,12 @@
           <div class="count-label-sub">adult(s)</div>
           <button class="count-btn" onclick="changeAdults(1)">+</button>
         </div>
+      </div>
+
+      <!-- Guest names (shown when adults > 1) -->
+      <div class="guest-names-section" id="guestNamesSection">
+        <div style="font-size:13px;color:var(--lavender-dark);font-weight:500;margin-bottom:10px;">Who's coming with you?</div>
+        <div id="guestNamesList"></div>
       </div>
 
       <div class="form-divider"></div>
@@ -858,13 +910,14 @@
 
 <script>
   // ▼▼▼ PASTE YOUR GOOGLE APPS SCRIPT URL HERE AFTER SETUP ▼▼▼
-  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyZjXCetHWiamYi4k7x208_QK0PkcBswaK4sw7BOldidCld19lfZgHVTmHPDCsm1YCV/exec';
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxFMq2-AQFGCXMkS4xcUDhmr_3rmOFuSNNyXVurPwayENVnfdBK6cCa9A6B_qwa0Llc/exec';
   // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
   let attending = null;
   let adults = 1;
   let kidsOn = false;
   let childCount = 0;
+  let guestCount = 0;
   let rsvpData = {};
 
   function setAttending(val) {
@@ -872,12 +925,56 @@
     document.getElementById('yesBtn').classList.toggle('active', val === true);
     document.getElementById('noBtn').classList.toggle('active', val === false);
     document.getElementById('attendanceForm').style.display = val ? 'block' : 'none';
-    document.getElementById('declineMsg').classList.toggle('visible', val === false);
+    document.getElementById('declineForm').classList.toggle('visible', val === false);
   }
 
   function changeAdults(d) {
     adults = Math.max(1, Math.min(20, adults + d));
     document.getElementById('adultCount').textContent = adults;
+    renderGuestNames();
+  }
+
+  function renderGuestNames() {
+    const section = document.getElementById('guestNamesSection');
+    const list = document.getElementById('guestNamesList');
+    if (adults <= 1) {
+      section.classList.remove('visible');
+      list.innerHTML = '';
+      guestCount = 0;
+      return;
+    }
+    section.classList.add('visible');
+    const needed = adults - 1;
+    // Add rows if needed
+    while (guestCount < needed) {
+      guestCount++;
+      const div = document.createElement('div');
+      div.className = 'guest-name-row';
+      div.id = 'guest_' + guestCount;
+      div.innerHTML = `
+        <span class="guest-num">Guest ${guestCount}</span>
+        <input type="text" placeholder="Full name" />
+      `;
+      list.appendChild(div);
+    }
+    // Remove extra rows
+    while (guestCount > needed) {
+      const el = document.getElementById('guest_' + guestCount);
+      if (el) el.remove();
+      guestCount--;
+    }
+  }
+
+  function getGuestNames() {
+    const names = [];
+    for (let i = 1; i <= guestCount; i++) {
+      const row = document.getElementById('guest_' + i);
+      if (row) {
+        const val = row.querySelector('input').value.trim();
+        if (val) names.push(val);
+      }
+    }
+    return names;
   }
 
   function toggleKids() {
@@ -910,6 +1007,48 @@
 
   function toggleDiet(el) { el.classList.toggle('active'); }
 
+  async function submitDecline() {
+    const first = document.getElementById('declineFirst').value.trim();
+    const last  = document.getElementById('declineLast').value.trim();
+    if (!first) { document.getElementById('declineFirst').focus(); return; }
+    const name = first + (last ? ' ' + last : '');
+
+    const btn = document.querySelector('#declineForm .submit-btn');
+    btn.disabled = true;
+    btn.querySelector('span').textContent = 'Submitting…';
+
+    const payload = {
+      timestamp: new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }),
+      name,
+      email: '',
+      attending: 'No',
+      adults: 0,
+      guestNames: '',
+      children: 'N/A',
+      childAges: 'N/A',
+      dietary: 'N/A',
+      notes: ''
+    };
+
+    try {
+      if (SHEET_URL && SHEET_URL !== 'https://script.google.com/macros/s/AKfycbxFMq2-AQFGCXMkS4xcUDhmr_3rmOFuSNNyXVurPwayENVnfdBK6cCa9A6B_qwa0Llc/exec') {
+        await fetch(SHEET_URL, {
+          method: 'POST', mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
+    } catch(e) { console.warn('Sheet error:', e); }
+
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('successScreen').classList.add('visible');
+    document.getElementById('successMsg').textContent =
+      `We'll miss you, ${name}! Thanks for letting us know. 💜`;
+    document.getElementById('successScreen').querySelector('.success-icon').textContent = '💌';
+    document.getElementById('successScreen').querySelector('.success-title').textContent = 'Thanks for letting us know!';
+    document.getElementById('successScreen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   function showReview() {
     const first = document.getElementById('firstName').value.trim();
     const last  = document.getElementById('lastName').value.trim();
@@ -928,19 +1067,27 @@
 
     const notes = document.getElementById('notes').value.trim();
     const name  = first + (last ? ' ' + last : '');
+    const guestNames = getGuestNames();
 
-    rsvpData = { name, email, adults, kids, diets, notes };
+    rsvpData = { name, email, adults, guestNames, kids, diets, notes };
 
+    const guestDisplay = guestNames.length > 0 ? guestNames.join(', ') : 'Just you';
     const rows = [
-      ['Name',     name],
-      ['Email',    email || '—'],
-      ['Adults',   adults + ' adult' + (adults > 1 ? 's' : '')],
-      ['Children', kids.length > 0 ? kids.length + ' child' + (kids.length > 1 ? 'ren' : '') + ' · ages: ' + kids.join(', ') : 'None'],
-      ['Dietary',  diets.length > 0 ? diets.join(', ') : 'None selected'],
-      ['Notes',    notes || '—'],
+      ['Your Name',  name],
+      ['Email',      email || '—'],
+      ['Adults',     adults + ' adult' + (adults > 1 ? 's' : '')],
+      ['Guests',     guestDisplay],
+      ['Children',   kids.length > 0 ? kids.length + ' child' + (kids.length > 1 ? 'ren' : '') + ' · ages: ' + kids.join(', ') : 'None'],
+      ['Dietary',    diets.length > 0 ? diets.join(', ') : 'None selected'],
+      ['Notes',      notes || '—'],
     ];
 
-    document.getElementById('reviewBlock').innerHTML = rows.map(([k, v]) =>
+    // Hide guests row if only 1 adult
+    const filteredRows = adults <= 1
+      ? rows.filter(r => r[0] !== 'Guests')
+      : rows;
+
+    document.getElementById('reviewBlock').innerHTML = filteredRows.map(([k, v]) =>
       `<div class="review-row"><span class="review-key">${k}</span><span class="review-val">${v}</span></div>`
     ).join('');
 
@@ -961,7 +1108,7 @@
     confirmBtn.disabled = true;
     confirmBtn.querySelector('span').textContent = 'Submitting…';
 
-    const { name, email, adults, kids, diets, notes } = rsvpData;
+    const { name, email, adults, guestNames, kids, diets, notes } = rsvpData;
     const kidsText = kids.length > 0
       ? kids.length + ' child' + (kids.length > 1 ? 'ren' : '') + ' (ages ' + kids.join(', ') + ')'
       : 'None';
@@ -972,6 +1119,7 @@
       email,
       attending:  'Yes',
       adults,
+      guestNames: guestNames.length > 0 ? guestNames.join(', ') : 'N/A',
       children:   kidsText,
       childAges:  kids.join(', ') || 'N/A',
       dietary:    diets.join(', ') || 'None',
@@ -979,22 +1127,19 @@
     };
 
     try {
-      if (SHEET_URL && SHEET_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
+      if (SHEET_URL && SHEET_URL !== 'https://script.google.com/macros/s/AKfycbxFMq2-AQFGCXMkS4xcUDhmr_3rmOFuSNNyXVurPwayENVnfdBK6cCa9A6B_qwa0Llc/exec') {
         await fetch(SHEET_URL, {
-          method:  'POST',
-          mode:    'no-cors',
+          method: 'POST', mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify(payload)
+          body: JSON.stringify(payload)
         });
       }
-    } catch (e) {
-      // Silent fail — guest still sees success, you can check logs if needed
-      console.warn('Sheet submission error:', e);
-    }
+    } catch(e) { console.warn('Sheet error:', e); }
 
+    const guestSuffix = guestNames.length > 0 ? ` with ${guestNames.join(' & ')}` : '';
     document.getElementById('reviewScreen').classList.remove('visible');
     document.getElementById('successMsg').textContent =
-      `Thank you, ${name}! We have you down for ${adults} adult${adults > 1 ? 's' : ''}${kids.length > 0 ? ' + ' + kidsText : ''}. See you Saturday, June 20th at 4:30 PM at Gangnam KBBQ!`;
+      `Thank you, ${name}! We have you down for ${adults} adult${adults > 1 ? 's' : ''}${guestSuffix}${kids.length > 0 ? ' + ' + kidsText : ''}. See you Saturday, June 20th at 4:30 PM at Gangnam KBBQ!`;
     document.getElementById('successScreen').classList.add('visible');
     document.getElementById('successScreen').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
